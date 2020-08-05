@@ -27,7 +27,7 @@ pub struct FileHeader {
 }
 
 impl Parse for FileHeader {
-    fn parse(reader: &mut impl Read) -> Result<Self, ParseError> {
+    fn parse<R: Read>(reader: &mut R) -> Result<Self, ParseError> {
         let mut buffer = [0; 24];
         if reader.read(&mut buffer)? < 24 {
             return Err(ParseError::MissingData);
@@ -86,7 +86,7 @@ pub enum ElfVersion {
 }
 
 impl Parse for ElfVersion {
-    fn parse(reader: &mut impl Read) -> Result<Self, ParseError> {
+    fn parse<R: Read>(reader: &mut R) -> Result<Self, ParseError> {
         let val = u8::parse(reader)?;
         Ok(match val {
             1 => Self::One,
@@ -121,7 +121,7 @@ pub enum OsAbi {
 }
 
 impl Parse for OsAbi {
-    fn parse(reader: &mut impl Read) -> Result<Self, ParseError> {
+    fn parse<R: Read>(reader: &mut R) -> Result<Self, ParseError> {
         let val = u8::parse(reader)?;
         Ok(match val {
             0x00 => Self::SystemV,
@@ -164,8 +164,8 @@ pub enum ObjectFileType {
 }
 
 impl ParseFromEndianess for ObjectFileType {
-    fn parse_from_endianess(
-        reader: &mut impl Read,
+    fn parse_from_endianess<R: Read>(
+        reader: &mut R,
         endianess: Endianess,
     ) -> Result<Self, ParseError> {
         let val = u16::parse_from_endianess(reader, endianess)?;
@@ -216,8 +216,8 @@ pub enum InstructionSetArch {
 }
 
 impl ParseFromEndianess for InstructionSetArch {
-    fn parse_from_endianess(
-        reader: &mut impl Read,
+    fn parse_from_endianess<R: Read>(
+        reader: &mut R,
         endianess: Endianess,
     ) -> Result<Self, ParseError> {
         let val = u16::parse_from_endianess(reader, endianess)?;

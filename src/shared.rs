@@ -26,7 +26,7 @@ pub enum Endianess {
 }
 
 impl Parse for Endianess {
-    fn parse(reader: &mut impl Read) -> Result<Self, ParseError> {
+    fn parse<R: Read>(reader: &mut R) -> Result<Self, ParseError> {
         let mut buf = [0];
         if reader.read(&mut buf)? < 1 {
             return Err(ParseError::MissingData);

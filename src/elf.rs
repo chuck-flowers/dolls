@@ -24,7 +24,7 @@ pub struct ElfDescriptor {
 }
 
 impl Parse for ElfDescriptor {
-    fn parse(reader: &mut impl Read) -> Result<Self, ParseError> {
+    fn parse<R: Read>(reader: &mut R) -> Result<Self, ParseError> {
         let file_header = FileHeader::parse(reader)?;
         let program_header = ProgramHeader::parse_from_working_context(
             reader,
@@ -54,7 +54,7 @@ pub enum ArchitectureWidth {
 }
 
 impl Parse for ArchitectureWidth {
-    fn parse(reader: &mut impl Read) -> Result<Self, ParseError> {
+    fn parse<R: Read>(reader: &mut R) -> Result<Self, ParseError> {
         let value = u8::parse(reader)?;
 
         Ok(match value {

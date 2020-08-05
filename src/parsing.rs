@@ -4,12 +4,12 @@ use std::io::Read;
 
 pub trait Parse: Sized {
     /// Build the type from a readable sequence of bytes.
-    fn parse(reader: &mut impl Read) -> Result<Self, ParseError>;
+    fn parse<R: Read>(reader: &mut R) -> Result<Self, ParseError>;
 }
 
 impl Parse for u8 {
-    fn parse(reader: &mut impl Read) -> Result<Self, ParseError> {
-        let byte = read_bytes::<1>(reader)?;
+    fn parse<R: Read>(reader: &mut R) -> Result<Self, ParseError> {
+        let byte = read_bytes::<R, 1>(reader)?;
         Ok(byte[0])
     }
 }
@@ -63,8 +63,8 @@ impl To8Bytes for u64 {
     }
 }
 
-pub(crate) fn read_bytes<const SIZE: usize>(
-    reader: &mut impl Read,
+pub(crate) fn read_bytes<R: Read, const SIZE: usize>(
+    reader: &mut R,
 ) -> Result<[u8; SIZE], ParseError> {
     let mut buffer = [0; SIZE];
     if reader.read(&mut buffer)? < SIZE {

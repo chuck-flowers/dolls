@@ -14,8 +14,8 @@ pub struct SectionHeader {
 }
 
 impl SectionHeader {
-    pub fn parse_entries<'a>(
-        reader: &'a mut impl Read,
+    pub fn parse_entries<'a, R: Read>(
+        reader: &'a mut R,
         endianess: Endianess,
         arch_width: ArchitectureWidth,
         working_context: &FileHeader,
@@ -106,8 +106,8 @@ pub enum EntryType {
 }
 
 impl ParseFromEndianess for EntryType {
-    fn parse_from_endianess(
-        reader: &mut impl Read,
+    fn parse_from_endianess<R: Read>(
+        reader: &mut R,
         endianess: Endianess,
     ) -> Result<Self, ParseError> {
         let val = u32::parse_from_endianess(reader, endianess)?;

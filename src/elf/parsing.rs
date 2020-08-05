@@ -7,18 +7,18 @@ use crate::shared::NativeInteger;
 use std::io::Read;
 
 pub(crate) trait ParseFromEndianess: Sized {
-    fn parse_from_endianess(
-        reader: &mut impl Read,
+    fn parse_from_endianess<R: Read>(
+        reader: &mut R,
         endianess: Endianess,
     ) -> Result<Self, ParseError>;
 }
 
 impl ParseFromEndianess for u16 {
-    fn parse_from_endianess(
-        reader: &mut impl Read,
+    fn parse_from_endianess<R: Read>(
+        reader: &mut R,
         endianess: Endianess,
     ) -> Result<Self, ParseError> {
-        let buffer = read_bytes::<2>(reader)?;
+        let buffer = read_bytes::<R, 2>(reader)?;
         Ok(match endianess {
             Endianess::Little => u16::from_le_bytes(buffer),
             Endianess::Big => u16::from_be_bytes(buffer),
@@ -27,11 +27,11 @@ impl ParseFromEndianess for u16 {
 }
 
 impl ParseFromEndianess for u32 {
-    fn parse_from_endianess(
-        reader: &mut impl Read,
+    fn parse_from_endianess<R: Read>(
+        reader: &mut R,
         endianess: Endianess,
     ) -> Result<Self, ParseError> {
-        let buffer = read_bytes::<4>(reader)?;
+        let buffer = read_bytes::<R, 4>(reader)?;
         Ok(match endianess {
             Endianess::Little => u32::from_le_bytes(buffer),
             Endianess::Big => u32::from_be_bytes(buffer),
@@ -40,8 +40,8 @@ impl ParseFromEndianess for u32 {
 }
 
 impl ParseFromEndianess for u64 {
-    fn parse_from_endianess(
-        reader: &mut impl Read,
+    fn parse_from_endianess<R: Read>(
+        reader: &mut R,
         endianess: Endianess,
     ) -> Result<u64, ParseError> {
         let buffer = read_bytes(reader)?;
@@ -56,8 +56,8 @@ impl<T> ParseFromEndianess for T
 where
     T: Parse,
 {
-    fn parse_from_endianess(
-        reader: &mut impl Read,
+    fn parse_from_endianess<R: Read>(
+        reader: &mut R,
         endianess: Endianess,
     ) -> Result<Self, ParseError> {
         T::parse(reader)
