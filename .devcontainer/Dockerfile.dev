@@ -1,0 +1,4 @@
+FROM rust
+
+RUN rustup toolchain install nightly --component clippy,rustfmt
+RUN rustup default nightly

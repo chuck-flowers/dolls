@@ -1,0 +1,8 @@
+name: dolls
+version: "1.0"
+author: Timothy Flowers
+about: Displays information from a shared object
+args:
+    - INPUT:
+        help: The path to the shared object to query information from
+        required: true

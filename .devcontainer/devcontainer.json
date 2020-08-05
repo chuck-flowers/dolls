@@ -1,0 +1,11 @@
+{
+    "context": "..",
+    "dockerFile": "./Dockerfile.dev",
+    "extensions": [
+        "belfz.search-crates-io",
+        "matklad.rust-analyzer",
+        "tamasfe.even-better-toml",
+    ],
+    "workspaceFolder": "/app",
+    "workspaceMount": "type=bind,src=${localWorkspaceFolder},dst=/app"
+}

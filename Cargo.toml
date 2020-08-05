@@ -1,0 +1,18 @@
+[package]
+name = "dolls"
+version = "0.1.0"
+authors = ["Timothy Flowers"]
+default-run = "dolls"
+
+[features]
+default = ["dll", "elf"]
+cli = ["clap"]
+dll = []
+elf = []
+
+[[bin]]
+name = "dolls"
+required-features = ["cli"]
+
+[dependencies]
+clap = { version = "3.0.0-beta.1", features = ["yaml"], optional = true }
